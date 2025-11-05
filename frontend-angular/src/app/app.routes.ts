@@ -9,6 +9,9 @@ import { OrganizationListComponent } from './components/organizations/organizati
 import { OrganizationDetailComponent } from './components/organizations/organization-detail/organization-detail.component';
 import { OrganizationFormComponent } from './components/organizations/organization-form/organization-form.component';
 
+// 👇 importar la tienda
+import { StoreListComponent } from './components/store/store-list.component';
+
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
   { 
@@ -28,6 +31,10 @@ export const routes: Routes = [
       { path: 'organizations/new', component: OrganizationFormComponent },
       { path: 'organizations/:nit', component: OrganizationDetailComponent },
       { path: 'organizations/edit/:nit', component: OrganizationFormComponent },
+
+      // Tienda
+      { path: 'tienda', component: StoreListComponent },
+
       { path: 'perfil', component: ProfileComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

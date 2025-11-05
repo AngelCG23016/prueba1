@@ -1,0 +1,64 @@
+<div class="store-header">
+  <h2>Tienda</h2>
+  <p>Productos disponibles para canjear o rifar</p>
+  <button class="btn-primary" (click)="startCreate()">+ Nuevo producto</button>
+</div>
+
+<!-- formulario de crear/editar -->
+<div class="product-form" *ngIf="isEditing">
+  <h3>{{ editingProduct?.id ? 'Editar producto' : 'Nuevo producto' }}</h3>
+
+  <label>
+    Nombre
+    <input type="text" [(ngModel)]="form.nombre" name="nombre" required />
+  </label>
+
+  <label>
+    Descripción
+    <textarea rows="3" [(ngModel)]="form.descripcion" name="descripcion"></textarea>
+  </label>
+
+  <label>
+    Precio
+    <input type="number" step="0.01" [(ngModel)]="form.precio" name="precio" required />
+  </label>
+
+  <label>
+    URL de imagen
+    <input type="text" [(ngModel)]="form.imagenUrl" name="imagenUrl" />
+  </label>
+
+  <div class="form-actions">
+    <button class="btn-primary" (click)="save()">Guardar</button>
+    <button class="btn-secondary" (click)="cancel()">Cancelar</button>
+  </div>
+</div>
+
+<!-- grid de productos -->
+<div class="store-grid" *ngIf="products.length; else empty">
+  <div class="product-card" *ngFor="let product of products">
+    <div class="product-image" *ngIf="product.imagenUrl; else noImage">
+      <img [src]="product.imagenUrl" [alt]="product.nombre" />
+    </div>
+    <ng-template #noImage>
+      <div class="product-image placeholder">
+        <span>Sin imagen</span>
+      </div>
+    </ng-template>
+
+    <div class="product-body">
+      <h3>{{ product.nombre }}</h3>
+      <p>{{ product.descripcion }}</p>
+      <span class="price">$ {{ product.precio }}</span>
+
+      <div class="actions">
+        <button class="btn-light" (click)="onEdit(product)">Editar</button>
+        <button class="btn-danger" (click)="onDelete(product)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #empty>
+  <p>No hay productos aún.</p>
+</ng-template>

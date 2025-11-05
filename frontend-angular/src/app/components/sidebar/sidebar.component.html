@@ -8,6 +8,7 @@
 
   <nav class="sidebar-nav">
     <div *ngIf="auth0Service.isAuthenticated() | async; else notAuthenticated">
+      <!-- Dashboard -->
       <a class="nav-item" 
          routerLink="/panel/dashboard" 
          routerLinkActive="active"
@@ -16,7 +17,7 @@
         <span *ngIf="!isCollapsed()">Dashboard</span>
       </a>
 
-     <!-- Organizaciones -->
+      <!-- Organizaciones -->
       <a class="nav-item" 
          routerLink="/panel/organizations" 
          routerLinkActive="active"
@@ -24,7 +25,17 @@
         <span class="material-icons">business</span>
         <span *ngIf="!isCollapsed()">Organizaciones</span>
       </a>
+
+      <!-- Tienda -->
+      <a class="nav-item" 
+         routerLink="/panel/tienda" 
+         routerLinkActive="active"
+         [class.collapsed]="isCollapsed()">
+        <span class="material-icons">shopping_cart</span>
+        <span *ngIf="!isCollapsed()">Tienda</span>
+      </a>
       
+      <!-- Perfil -->
       <a class="nav-item" 
          routerLink="/panel/perfil" 
          routerLinkActive="active"
@@ -33,6 +44,7 @@
         <span *ngIf="!isCollapsed()">Mi Perfil</span>
       </a>
 
+      <!-- Cerrar sesión -->
       <a class="nav-item" 
          (click)="logout()"
          [class.collapsed]="isCollapsed()">
