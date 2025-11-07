@@ -5,33 +5,34 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "organizaciones")
 public class Organization {
+
     @Id
-    @Column(name = "nit", nullable = false, unique = true, length = 20)
+    @Column(name = "nit", nullable = false, unique = true, length = 14)
     private String nit;
 
-    @Column(name = "nombre", nullable = false, length = 255)
+    @Column(name = "nombre", nullable = false, length = 25)
     private String nombre;
 
     @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
 
-    @Column(name = "logo_url", length = 500)
+    @Column(name = "logo_url", length = 100)
     private String logoUrl;
 
-    @Column(name = "nombre_inscriptor", length = 255)
+    @Column(name = "nombre_inscriptor", length = 50)
     private String nombreInscriptor;
 
-    @Column(name = "rol", length = 100)
+    @Column(name = "rol", length = 50)
     private String rol;
 
-    @Column(name = "correo", length = 255)
+    @Column(name = "correo", length = 50)
     private String correo;
 
-    @Column(name = "contraseña", length = 255)
+    @Column(name = "contraseña", length = 50)
     private String contraseña;
 
-    public Organization() {
 
+    public Organization() {
     }
 
     public Organization(String nit, String nombre, String descripcion, String logoUrl, 

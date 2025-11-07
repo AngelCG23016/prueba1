@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 // Controlador REST que maneja todas las operaciones HTTP relacionadas con Organizaciones
-
+ 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/organizaciones")
@@ -22,8 +22,6 @@ public class OrganizationController {
 
     private final OrganizationService service;
     private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
-
-    // Directorio donde se guardarán los logos subidos
     
     private final String UPLOAD_DIR = "uploads/logos/";
 
@@ -31,15 +29,11 @@ public class OrganizationController {
         this.service = service;
     }
 
-    // Endpoint para obtener todas las organizaciones
-
     @GetMapping
     public List<Organization> obtenerTodasLasOrganizaciones() {
         logger.info("Obteniendo todas las organizaciones");
         return service.obtenerTodasLasOrganizaciones();
     }
-
-    // Endpoint para obtener una organización específica por su NIT
 
     @GetMapping("/{nit}")
     public ResponseEntity<?> obtenerOrganizacionPorNit(@PathVariable String nit) {
@@ -54,8 +48,6 @@ public class OrganizationController {
         }
     }
 
-    // Endpoint para crear una nueva organización
-
     @PostMapping
     public ResponseEntity<?> crearOrganizacion(@RequestBody Organization organizacion) {
         try {
@@ -63,24 +55,90 @@ public class OrganizationController {
             logger.info("Datos recibidos - NIT: {}, Nombre: {}, Inscriptor: {}", 
                        organizacion.getNit(), organizacion.getNombre(), organizacion.getNombreInscriptor());
             
-            // Validaciones básicas
+            // Validaciones básicas de campos requeridos
+
             if (organizacion.getNit() == null || organizacion.getNit().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "El NIT es requerido"));
             }
+            
+            // Validar que el NIT solo contenga números
+
+            if (!organizacion.getNit().matches("^[0-9]+$")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El NIT solo puede contener números"));
+            }
+            
+            // Validar longitud del NIT (máximo 14 caracteres)
+
+            if (organizacion.getNit().length() > 14) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El NIT no puede tener más de 14 dígitos"));
+            }
+            
             if (organizacion.getNombre() == null || organizacion.getNombre().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "El nombre de la organización es requerido"));
             }
+            
+            // Validar longitud del nombre máximo 25 caracteres
+
+            if (organizacion.getNombre().length() > 25) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre no puede tener más de 25 caracteres"));
+            }
+            
+            // Validar que el nombre solo contenga letras, números y espacios
+
+            if (!organizacion.getNombre().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\\s]+$")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre solo puede contener letras, números y espacios"));
+            }
+            
             if (organizacion.getNombreInscriptor() == null || organizacion.getNombreInscriptor().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "El nombre del inscriptor es requerido"));
             }
+            
+            // Validar longitud del nombre del inscriptor máximo 50 caracteres
+
+            if (organizacion.getNombreInscriptor().length() > 50) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre del inscriptor no puede tener más de 50 caracteres"));
+            }
+            
+            // Validar que el nombre del inscriptor solo contenga letras y espacios
+
+            if (!organizacion.getNombreInscriptor().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre del inscriptor solo puede contener letras y espacios"));
+            }
+            
             if (organizacion.getRol() == null || organizacion.getRol().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "El rol es requerido"));
             }
+            
+            // Validar longitud del rol máximo 50 caracteres
+
+            if (organizacion.getRol().length() > 50) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El rol no puede tener más de 50 caracteres"));
+            }
+            
+            // Validar que el rol solo contenga letras, números y espacios
+
+            if (!organizacion.getRol().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\\s]+$")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El rol solo puede contener letras, números y espacios"));
+            }
+            
             if (organizacion.getCorreo() == null || organizacion.getCorreo().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "El correo es requerido"));
             }
+            
+            // Validar longitud del correo máximo 50 caracteres
+
+            if (organizacion.getCorreo().length() > 50) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El correo no puede tener más de 50 caracteres"));
+            }
+            
             if (organizacion.getContraseña() == null || organizacion.getContraseña().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "La contraseña es requerida"));
+            }
+            
+            // Validar longitud mínima de contraseña
+
+            if (organizacion.getContraseña().length() < 6) {
+                return ResponseEntity.badRequest().body(Map.of("error", "La contraseña debe tener al menos 6 caracteres"));
             }
             
             Organization organizacionGuardada = service.guardarOrganizacion(organizacion);
@@ -96,12 +154,45 @@ public class OrganizationController {
         }
     }
 
-    // Endpoint para actualizar una organización existente
-
     @PutMapping("/{nit}")
     public ResponseEntity<?> actualizarOrganizacion(@PathVariable String nit, @RequestBody Organization organizacion) {
         try {
             logger.info("Actualizando organización con NIT: {}", nit);
+            
+            // Validaciones para actualización
+
+            if (organizacion.getNombre() != null && organizacion.getNombre().length() > 25) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre no puede tener más de 25 caracteres"));
+            }
+            
+            if (organizacion.getNombre() != null && !organizacion.getNombre().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\\s]+$")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre solo puede contener letras, números y espacios"));
+            }
+
+            if (organizacion.getNombreInscriptor() != null && organizacion.getNombreInscriptor().length() > 50) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre del inscriptor no puede tener más de 50 caracteres"));
+            }
+            
+            if (organizacion.getNombreInscriptor() != null && !organizacion.getNombreInscriptor().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El nombre del inscriptor solo puede contener letras y espacios"));
+            }
+            
+            if (organizacion.getRol() != null && organizacion.getRol().length() > 50) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El rol no puede tener más de 50 caracteres"));
+            }
+            
+            if (organizacion.getRol() != null && !organizacion.getRol().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\\s]+$")) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El rol solo puede contener letras, números y espacios"));
+            }
+
+            if (organizacion.getCorreo() != null && organizacion.getCorreo().length() > 50) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El correo no puede tener más de 50 caracteres"));
+            }
+            
+            if (organizacion.getContraseña() != null && organizacion.getContraseña().length() < 6) {
+                return ResponseEntity.badRequest().body(Map.of("error", "La contraseña debe tener al menos 6 caracteres"));
+            }
+            
             Organization organizacionActualizada = service.actualizarOrganizacion(nit, organizacion);
             return ResponseEntity.ok(organizacionActualizada);
             
@@ -113,8 +204,6 @@ public class OrganizationController {
             ));
         }
     }
-
-    // Endpoint para eliminar una organización
 
     @DeleteMapping("/{nit}")
     public ResponseEntity<?> eliminarOrganizacion(@PathVariable String nit) {
@@ -132,15 +221,11 @@ public class OrganizationController {
         }
     }
 
-    // Endpoint para buscar organizaciones por nombre
-
     @GetMapping("/buscar")
     public List<Organization> buscarOrganizacionesPorNombre(@RequestParam String nombre) {
         logger.info("Buscando organizaciones con nombre: {}", nombre);
         return service.buscarOrganizacionesPorNombre(nombre);
     }
-
-    // Endpoint para subir archivos de logo de organizaciones
 
     @PostMapping("/upload-logo")
     public ResponseEntity<?> uploadLogo(@RequestParam("file") MultipartFile file) {
