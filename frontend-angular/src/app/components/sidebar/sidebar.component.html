@@ -1,0 +1,75 @@
+<div class="sidebar" [class.collapsed]="isCollapsed()">
+  <div class="sidebar-header">
+    <button class="toggle-btn" (click)="toggleSidebar.emit()">
+      <span class="material-icons">menu</span>
+    </button>
+    <h2 *ngIf="!isCollapsed()">Appoyar</h2>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div *ngIf="auth0Service.isAuthenticated() | async; else notAuthenticated">
+      
+      <!-- Dashboard-->
+      <a class="nav-item" 
+         *ngIf="isAdmin$ | async"
+         routerLink="/panel/dashboard" 
+         routerLinkActive="active"
+         [class.collapsed]="isCollapsed()">
+        <span class="material-icons">dashboard</span>
+        <span *ngIf="!isCollapsed()">Dashboard</span>
+      </a>
+
+      <!-- Organizaciones -->
+      <a class="nav-item" 
+         routerLink="/panel/organizations" 
+         routerLinkActive="active"
+         [class.collapsed]="isCollapsed()">
+        <span class="material-icons">business</span>
+        <span *ngIf="!isCollapsed()">Organizaciones</span>
+      </a>
+
+      <!-- Tienda -->
+      <a class="nav-item" 
+         routerLink="/panel/tienda" 
+         routerLinkActive="active"
+         [class.collapsed]="isCollapsed()">
+        <span class="material-icons">shopping_cart</span>
+        <span *ngIf="!isCollapsed()">Tienda</span>
+      </a>
+      
+      <!-- Perfil -->
+      <a class="nav-item" 
+         routerLink="/panel/perfil" 
+         routerLinkActive="active"
+         [class.collapsed]="isCollapsed()">
+        <span class="material-icons">account_circle</span>
+        <span *ngIf="!isCollapsed()">Mi Perfil</span>
+      </a>
+
+      <!-- Cerrar sesión -->
+      <a class="nav-item" 
+         (click)="logout()"
+         [class.collapsed]="isCollapsed()">
+        <span class="material-icons">logout</span>
+        <span *ngIf="!isCollapsed()">Cerrar Sesión</span>
+      </a>
+    </div>
+
+    <ng-template #notAuthenticated>
+      <a class="nav-item" 
+         routerLink="/auth/acceso" 
+         routerLinkActive="active"
+         [class.collapsed]="isCollapsed()">
+        <span class="material-icons">login</span>
+        <span *ngIf="!isCollapsed()">Iniciar Sesión</span>
+      </a>
+    </ng-template>
+  </nav>
+
+  <div class="user-info" *ngIf="(auth0Service.isAuthenticated() | async) && !isCollapsed() && (auth0Service.getUser() | async) as user">
+    <div class="user-details">
+      <span class="user-name">{{ getUserDisplayName(user) }}</span>
+      <span class="user-email">{{ user.email }}</span>
+    </div>
+  </div>
+</div>

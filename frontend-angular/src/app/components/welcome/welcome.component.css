@@ -1,0 +1,62 @@
+.welcome-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+  padding: 20px;
+}
+
+.welcome-card {
+  background: var(--white);
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(74, 144, 226, 0.15);
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+}
+
+.logo-section {
+  margin-bottom: 2rem;
+}
+
+.app-title {
+  color: var(--primary-dark);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+  color: var(--text-dark);
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.welcome-content h2 {
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.welcome-content p {
+  color: #666;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.start-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  padding: 12px 32px;
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}

@@ -1,0 +1,13 @@
+<div class="auth-container" *ngIf="auth.isAuthenticated$ | async; else loggedOut">
+  <button class="btn-primary" (click)="logout()">
+    Cerrar Sesión
+  </button>
+</div>
+
+<ng-template #loggedOut>
+  <div class="auth-container">
+    <button class="btn-primary" (click)="login()">
+      Iniciar Sesión
+    </button>
+  </div>
+</ng-template>

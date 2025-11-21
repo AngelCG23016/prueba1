@@ -1,31 +1,32 @@
 {
-  "name": "frontend-angular",
+  "name": "appoyar",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
+    "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "echo \"(tests no configurados)\" && exit 0"
+    "test": "ng test"
   },
   "dependencies": {
-    "@angular/animations": "^18.2.14",
-    "@angular/common": "^18.2.14",
-    "@angular/compiler": "^18.2.14",
-    "@angular/core": "^18.2.14",
-    "@angular/forms": "^18.2.14",
-    "@angular/platform-browser": "^18.2.14",
-    "@angular/platform-browser-dynamic": "^18.2.14",
-    "@angular/router": "^18.2.14",
-    "rxjs": "~7.8.1",
-    "tslib": "^2.6.2",
-    "zone.js": "~0.14.10"
+    "@angular/animations": "20.3.3",
+    "@angular/common": "20.3.3",
+    "@angular/compiler": "20.3.3",
+    "@angular/core": "20.3.3",
+    "@angular/forms": "20.3.3",
+    "@angular/platform-browser": "20.3.3",
+    "@angular/platform-browser-dynamic": "20.3.3",
+    "@angular/router": "20.3.3",
+    "@auth0/auth0-angular": "^2.2.3",
+    "boxicons": "^2.1.4",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.21",
-    "@angular/cli": "^18.2.21",
-    "@angular/compiler-cli": "^18.2.14",
-    "@types/node": "^20.12.12",
-    "typescript": "~5.5.4"
+    "@angular-devkit/build-angular": "20.3.3",
+    "@angular/cli": "20.3.3",
+    "@angular/compiler-cli": "20.3.3",
+    "typescript": "5.9.2"
   }
 }

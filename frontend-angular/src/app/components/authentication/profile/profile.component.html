@@ -1,0 +1,34 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <h2>Mi Perfil</h2>
+      <p>Información de tu cuenta</p>
+    </div>
+
+    <div class="profile-info" *ngIf="auth0Service.getUser() | async as user">
+      <div class="info-item">
+        <label>Nombre:</label>
+        <span class="username">{{ getUserDisplayName(user) }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Correo Electrónico:</label>
+        <span>{{ user.email }}</span>
+      </div>
+
+      <div class="info-item">
+        <label>Email Verificado:</label>
+        <span [class.verified]="user.email_verified" [class.not-verified]="!user.email_verified">
+          {{ user.email_verified ? 'Sí' : 'No' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="btn-primary logout-btn" (click)="logout()">
+        <span class="material-icons">logout</span>
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
+</div>

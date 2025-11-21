@@ -1,18 +1,52 @@
-### Spring Boot ###
+### --- SPRING BOOT / MAVEN --- ###
 target/
 *.jar
 *.war
 *.class
 *.log
+# Archivos de Maven wrapper
+backend-springboot/.mvn/
+backend-springboot/mvnw
+backend-springboot/mvnw.cmd
 
-### Angular ###
+### --- ANGULAR --- ###
 frontend-angular/node_modules/
 frontend-angular/dist/
 frontend-angular/.angular/cache/
+frontend-angular/.env        # por si usan uno distinto para frontend
+frontend-angular/npm-debug.log
+frontend-angular/yarn-debug.log
+frontend-angular/yarn-error.log
 
-### IDE / Sistema ###
+### --- DOCKER --- ###
+# Archivos y carpetas generadas por Docker
+**/uploads/
+**/postgres_data/
+**/backend_uploads/
+.docker/
+docker-compose.override.yml
+# Evita accidentalmente subir volúmenes o builds locales
+**/tmp/
+**/.dockerignore
+**/.env            # importante: ignora variables reales
+.env               # archivo real de entorno (no se sube)
+.env.local
+.env.*.local
+# pero sí queremos que .env.sample esté en el repo
+!*.env.sample
+
+### --- IDE / EDITOR --- ###
 .vscode/
-*.iml
 .idea/
+*.iml
+
+### --- OS SYSTEM FILES --- ###
 .DS_Store
 Thumbs.db
+ehthumbs.db
+desktop.ini
+
+### --- GIT / BUILD BACKUPS --- ###
+*.bak
+*.swp
+*.swo

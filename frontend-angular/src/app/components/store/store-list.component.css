@@ -1,0 +1,157 @@
+.store-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.store-header h2 {
+  margin: 0;
+}
+
+.store-header p {
+  margin: 0;
+  color: #5f6f86;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background: #2f74c0;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.product-form {
+  background: #fff;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(15, 76, 129, 0.05);
+}
+
+.product-form h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.product-form label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.product-form input,
+.product-form textarea {
+  width: 100%;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.btn-secondary {
+  background: #e8edf5;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ====== GRID ====== */
+.store-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ====== CARD ====== */
+.product-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(15, 76, 129, 0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+}
+
+/* ====== IMAGEN ====== */
+.product-image {
+  width: 100%;
+  aspect-ratio: 16 / 9; 
+  background: #e6efff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+  background: #fff;
+}
+
+.product-image.placeholder {
+  color: #7a8aa0;
+  font-size: 0.85rem;
+}
+
+/* ====== BODY ====== */
+.product-body {
+  padding: 1rem 1rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.product-body h3 {
+  margin: 0;
+}
+
+.product-body p {
+  margin: 0;
+  color: #5f6f86;
+  font-size: 0.85rem;
+}
+
+.price {
+  color: #0a63c6;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.btn-light {
+  background: #e4eef9;
+  border: none;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.btn-danger {
+  background: #f8d1d4;
+  border: none;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}

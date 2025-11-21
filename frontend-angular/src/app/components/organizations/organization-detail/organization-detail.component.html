@@ -1,0 +1,101 @@
+<div class="organization-detail-container">
+  <button class="btn-secondary back-btn" (click)="goBack()">
+    <span class="material-icons">arrow_back</span>
+    Volver a Organizaciones
+  </button>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando organización...</p>
+  </div>
+
+  <div *ngIf="!loading && organization" class="organization-detail">
+    <div class="detail-header">
+      <div class="organization-logo">
+        <img [src]="organization.logoUrl || 'assets/default-organization.png'" 
+             [alt]="organization.nombre"
+             (error)="organization.logoUrl = 'assets/default-organization.png'">
+      </div>
+      <div class="organization-title">
+        <h1>{{ organization.nombre }}</h1>
+        <p class="organization-nit">NIT: {{ organization.nit }}</p>
+      </div>
+    </div>
+
+    <div class="detail-content">
+      <div class="description-section">
+        <h2>Descripción</h2>
+        <p>{{ organization.descripcion || 'No hay descripción disponible.' }}</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-section">
+          <h3>Información del Inscriptor</h3>
+          <div class="info-item">
+            <label>Nombre del Inscriptor:</label>
+            <span>{{ organization.nombreInscriptor }}</span>
+          </div>
+          <div class="info-item">
+            <label>Rol:</label>
+            <span>{{ organization.rol }}</span>
+          </div>
+          <div class="info-item">
+            <label>Correo Electrónico:</label>
+            <span>{{ organization.correo }}</span>
+          </div>
+          <div class="info-item" *ngIf="isAdmin$ | async">
+            <label>Contraseña:</label>
+            <span class="password-field">••••••••</span>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h3>Información de Estado</h3>
+          <div class="info-item" *ngIf="isAdmin$ | async">
+            <label>Total Donado:</label>
+            <span class="total-donado">${{ totalDonado | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Estado:</label>
+            <span class="status-active">Activa</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-section">
+        <button class="btn-primary donate-btn" (click)="donate()">
+          <span class="material-icons">favorite</span>
+          Donar a esta Organización
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Donación -->
+  <div *ngIf="showDonationModal && organization" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Realizar Donación</h2>
+        <button class="close-btn" (click)="closeDonationModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-donation-form 
+          [organization]="organization"
+          (donationSuccess)="onDonationSuccess()"
+          (cancel)="closeDonationModal()">
+        </app-donation-form>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !organization" class="error-state">
+    <span class="material-icons">error</span>
+    <h3>Organización no encontrada</h3>
+    <p>La organización que buscas no existe o no está disponible.</p>
+    <button class="btn-primary" (click)="goBack()">
+      Volver a Organizaciones
+    </button>
+  </div>
+</div>

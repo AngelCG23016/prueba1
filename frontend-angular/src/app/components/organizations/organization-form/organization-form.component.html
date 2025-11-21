@@ -1,0 +1,170 @@
+<div class="form-container">
+  <div class="form-header">
+    <button class="btn-secondary back-btn" (click)="cancel()">
+      <span class="material-icons">arrow_back</span>
+      Volver
+    </button>
+    <h1>{{ isEditMode ? 'Editar Organización' : 'Nueva Organización' }}</h1>
+    <p>{{ isEditMode ? 'Modifica los datos de la organización' : 'Complete los datos para crear una nueva organización' }}</p>
+  </div>
+
+  <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()" class="organization-form">
+    
+    <div class="form-section">
+      <h3>Información de la Organización</h3>
+      
+      <div class="form-group">
+        <label for="nit">NIT *</label>
+        <input 
+          type="text" 
+          id="nit" 
+          formControlName="nit" 
+          [readonly]="isEditMode"
+          placeholder="Ingrese el NIT de la organización (Solo números)"
+          class="form-control"
+          maxlength="15">
+        <div *ngIf="organizationForm.get('nit')?.invalid && organizationForm.get('nit')?.touched" class="error-message">
+          <span *ngIf="organizationForm.get('nit')?.errors?.['required']">El NIT es requerido</span>
+          <span *ngIf="organizationForm.get('nit')?.errors?.['pattern']">El NIT solo puede contener números</span>
+          
+          <span *ngIf="organizationForm.get('nit')?.errors?.['maxlength']">El NIT no puede tener más de 14 dígitos</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="nombre">Nombre de la Organización *</label>
+        <input 
+          type="text" 
+          id="nombre" 
+          formControlName="nombre" 
+          placeholder="Ingrese el nombre de la organización"
+          class="form-control"
+          maxlength="26">
+        <div *ngIf="organizationForm.get('nombre')?.invalid && organizationForm.get('nombre')?.touched" class="error-message">
+          <span *ngIf="organizationForm.get('nombre')?.errors?.['required']">El nombre es requerido</span>
+          <span *ngIf="organizationForm.get('nombre')?.errors?.['maxlength']">El nombre no puede tener más de 25 caracteres</span>
+          <span *ngIf="organizationForm.get('nombre')?.errors?.['pattern']">El nombre solo puede contener letras, números y espacios</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea 
+          id="descripcion" 
+          formControlName="descripcion" 
+          rows="4"
+          placeholder="Describa la organización, su misión y objetivos..."
+          class="form-control"
+          maxlength="101"></textarea>
+        <div *ngIf="organizationForm.get('descripcion')?.invalid && organizationForm.get('descripcion')?.touched" class="error-message">
+          <span *ngIf="organizationForm.get('descripcion')?.errors?.['maxlength']">La descripción no puede tener más de 100 caracteres</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Información del Inscriptor</h3>
+      
+      <div class="form-group">
+        <label for="nombreInscriptor">Nombre del Inscriptor *</label>
+        <input 
+          type="text" 
+          id="nombreInscriptor" 
+          formControlName="nombreInscriptor" 
+          placeholder="Nombre completo de la persona que registra"
+          class="form-control"
+          maxlength="51">
+        <div *ngIf="organizationForm.get('nombreInscriptor')?.invalid && organizationForm.get('nombreInscriptor')?.touched" class="error-message">
+          <span *ngIf="organizationForm.get('nombreInscriptor')?.errors?.['required']">El nombre del inscriptor es requerido</span>
+          <span *ngIf="organizationForm.get('nombreInscriptor')?.errors?.['maxlength']">El nombre no puede tener más de 50 caracteres</span>
+          <span *ngIf="organizationForm.get('nombreInscriptor')?.errors?.['pattern']">El nombre solo puede contener letras y espacios</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="rol">Rol/Cargo *</label>
+        <input 
+          type="text" 
+          id="rol" 
+          formControlName="rol" 
+          placeholder="Director, Administrador, Representante Legal"
+          class="form-control"
+          maxlength="51">
+        <div *ngIf="organizationForm.get('rol')?.invalid && organizationForm.get('rol')?.touched" class="error-message">
+          <span *ngIf="organizationForm.get('rol')?.errors?.['required']">El rol es requerido</span>
+          <span *ngIf="organizationForm.get('rol')?.errors?.['maxlength']">El rol no puede tener más de 50 caracteres</span>
+          <span *ngIf="organizationForm.get('rol')?.errors?.['pattern']">El rol solo puede contener letras, números y espacios</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="correo">Correo Electrónico *</label>
+        <input 
+          type="email" 
+          id="correo" 
+          formControlName="correo" 
+          placeholder="correo@ejemplo.com"
+          class="form-control"
+          maxlength="51">
+        <div *ngIf="organizationForm.get('correo')?.invalid && organizationForm.get('correo')?.touched" class="error-message">
+          <span *ngIf="organizationForm.get('correo')?.errors?.['required']">El correo es requerido</span>
+          <span *ngIf="organizationForm.get('correo')?.errors?.['email']">Ingresa un correo válido</span>
+          <span *ngIf="organizationForm.get('correo')?.errors?.['maxlength']">El correo no puede tener más de 50 caracteres</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contraseña">Contraseña *</label>
+        <input 
+          type="password" 
+          id="contraseña" 
+          formControlName="contraseña" 
+          placeholder="Mínimo 6 caracteres"
+          class="form-control"
+          maxlength="51">
+        <div *ngIf="organizationForm.get('contraseña')?.invalid && organizationForm.get('contraseña')?.touched" class="error-message">
+          <span *ngIf="organizationForm.get('contraseña')?.errors?.['required']">La contraseña es requerida</span>
+          <span *ngIf="organizationForm.get('contraseña')?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+          <span *ngIf="organizationForm.get('contraseña')?.errors?.['maxlength']">La contraseña no puede tener más de 50 caracteres</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Logo de la Organización</h3>
+      
+      <div class="logo-container">
+        <div class="logo-preview" *ngIf="previewUrl">
+          <img [src]="previewUrl" alt="Preview del logo" class="preview-image" (error)="previewUrl = null">
+          <button type="button" class="btn-remove" (click)="removeImage()">
+            <span class="material-icons">delete</span>
+          </button>
+        </div>
+
+        <div class="url-input">
+          <label for="logoUrl">URL del Logo</label>
+          <input 
+            type="url" 
+            id="logoUrl" 
+            formControlName="logoUrl" 
+            placeholder="https://ejemplo.com/logo.png"
+            class="form-control"
+            maxlength="100"
+            (input)="updatePreview()">
+          <div *ngIf="organizationForm.get('logoUrl')?.invalid && organizationForm.get('logoUrl')?.touched" class="error-message">
+            <span *ngIf="organizationForm.get('logoUrl')?.errors?.['maxlength']">La URL no puede tener más de 100 caracteres</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="cancel()" [disabled]="loading">
+        Cancelar
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="organizationForm.invalid || loading">
+        <span *ngIf="loading" class="spinner"></span>
+        {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear') }}
+      </button>
+    </div>
+  </form>
+</div>
