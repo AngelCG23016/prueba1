@@ -2,6 +2,8 @@ import { Component, input, output, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Auth0IntegrationService } from '../../services/auth0.service';
+import { UserRolesService } from '../../services/user-roles.service'; 
+import { Observable } from 'rxjs'; 
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +16,15 @@ export class SidebarComponent {
   isCollapsed = input.required<boolean>();
   toggleSidebar = output<void>();
   auth0Service = inject(Auth0IntegrationService);
+  userRolesService = inject(UserRolesService);
+
+  // Variables para control de roles
+  isAdmin$: Observable<boolean>;
+
+  constructor() {
+    // Inicializar observable de permisos
+    this.isAdmin$ = this.userRolesService.isAdmin();
+  }
 
   // Obtiene el nombre de display del usuario para mostrar en la interfaz
 

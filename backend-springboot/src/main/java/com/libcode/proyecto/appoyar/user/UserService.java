@@ -39,4 +39,9 @@ public class UserService {
         return repository.findByCorreo(correo)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con correo: " + correo));
     }
+
+    public User obtenerUsuarioPorId(Long id) {
+    return repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+    }
 }

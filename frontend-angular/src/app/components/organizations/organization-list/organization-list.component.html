@@ -9,7 +9,7 @@
   </div>
 
   <div class="actions-header">
-    <button class="btn-primary" (click)="createOrganization()">
+    <button *ngIf="canCreate$ | async" class="btn-primary" (click)="createOrganization()">
       <span class="material-icons">add</span>
       Nueva Organización
     </button>
@@ -36,20 +36,22 @@
       </div>
 
       <div class="organization-actions">
-        <button class="btn-icon edit-btn" 
+        <button *ngIf="canEdit$ | async"
+                class="btn-icon edit-btn" 
                 (click)="editOrganization($event, org.nit)"
                 title="Editar organización">
           <span class="material-icons">edit</span>
         </button>
         
-        <button class="btn-icon delete-btn" 
+        <button *ngIf="canDelete$ | async"
+                class="btn-icon delete-btn" 
                 (click)="deleteOrganization($event, org.nit, org.nombre)"
                 title="Eliminar organización">
           <span class="material-icons">delete</span>
         </button>
         
         <button class="btn-primary donate-btn" 
-                (click)="donateOrganization($event)"
+                (click)="donateOrganization($event, org)"
                 title="Donar a la organización">
           <span class="material-icons">favorite</span>
           Donar
@@ -62,8 +64,27 @@
     <span class="material-icons">business</span>
     <h3>No hay organizaciones</h3>
     <p>Comienza creando la primera organización</p>
-    <button class="btn-primary" (click)="createOrganization()">
+    <button *ngIf="canCreate$ | async" class="btn-primary" (click)="createOrganization()">
       Crear Organización
     </button>
+  </div>
+
+  <!-- Modal de Donación -->
+  <div *ngIf="showDonationModal && selectedOrganization" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Realizar Donación</h2>
+        <button class="close-btn" (click)="closeDonationModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-donation-form 
+          [organization]="selectedOrganization"
+          (donationSuccess)="onDonationSuccess()"
+          (cancel)="closeDonationModal()">
+        </app-donation-form>
+      </div>
+    </div>
   </div>
 </div>

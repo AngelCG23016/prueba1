@@ -1,7 +1,7 @@
 <div class="store-header">
   <h2>Tienda</h2>
   <p>Productos disponibles para canjear o rifar</p>
-  <button class="btn-primary" (click)="startCreate()">+ Nuevo producto</button>
+  <button *ngIf="canCreate$ | async" class="btn-primary" (click)="startCreate()">+ Nuevo producto</button>
 </div>
 
 <!-- formulario de crear/editar -->
@@ -52,8 +52,8 @@
       <span class="price">$ {{ product.precio }}</span>
 
       <div class="actions">
-        <button class="btn-light" (click)="onEdit(product)">Editar</button>
-        <button class="btn-danger" (click)="onDelete(product)">Eliminar</button>
+        <button *ngIf="canEdit$ | async" class="btn-light" (click)="onEdit(product)">Editar</button>
+        <button *ngIf="canDelete$ | async" class="btn-danger" (click)="onDelete(product)">Eliminar</button>
       </div>
     </div>
   </div>

@@ -1,10 +1,30 @@
 <div class="dashboard-container">
-  <div class="dashboard-header">
-    <h1>Dashboard</h1>
-    <p>Panel de control</p>
+  <!-- Bienvenida -->
+  <div class="welcome-section">
+    <div class="welcome-content">
+      <h1 class="welcome-title">¡Bienvenido a Appoyar!</h1>
+
+      <p class="welcome-subtitle">
+        Impulsa causas sociales, apoya organizaciones y transforma vidas.
+        Esta plataforma te permite donar de forma sencilla, rápida y totalmente segura.
+      </p>
+
+      <div class="welcome-features">
+        <div class="feature-item">
+          <span class="material-icons">verified_user</span>
+          <span>Transacciones Seguras</span>
+        </div>
+
+        <div class="feature-item">
+          <span class="material-icons">diversity_3</span>
+          <span>Apoyo a Organizaciones</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="dashboard-stats">
+  <!-- Dashboard Stats -->
+  <div class="dashboard-stats" *ngIf="isAdmin$ | async">
     <div class="stat-card">
       <div class="stat-icon">
         <span class="material-icons">assessment</span>
@@ -21,7 +41,7 @@
       </div>
       <div class="stat-content">
         <h3>Tareas Pendientes</h3>
-        <p class="stat-number">3</p>
+        <p class="stat-number">2</p>
       </div>
     </div>
 
@@ -36,25 +56,19 @@
     </div>
   </div>
 
-  <div class="recent-activity">
+  <div class="recent-activity" *ngIf="isAdmin$ | async">
     <h2>Actividad Pendiente</h2>
     <div class="activity-list">
       <div class="activity-item">
         <span class="material-icons">add_circle</span>
         <div class="activity-content">
-          <p>Crear Modulo de Organizaciones</p>
+          <p>Agregar compras de productos mediante puntos de donaciones</p>
         </div>
       </div>
       <div class="activity-item">
         <span class="material-icons">add_circle</span>
         <div class="activity-content">
-          <p>Asignacion de Roles</p>
-        </div>
-      </div>
-      <div class="activity-item">
-        <span class="material-icons">add_circle</span>
-        <div class="activity-content">
-          <p>Crear Modulo de Tienda</p>
+          <p>Agregar numero de puntos de donaciones al perfil del usuario</p>
         </div>
       </div>
     </div>

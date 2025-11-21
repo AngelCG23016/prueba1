@@ -1,5 +1,8 @@
 package com.libcode.proyecto.appoyar.user;
 import jakarta.persistence.*;
+import java.util.List;
+import com.libcode.proyecto.appoyar.donation.Donation;
+import com.fasterxml.jackson.annotation.JsonIgnore; 
 
 @Entity
 @Table(name = "usuarios")
@@ -17,6 +20,11 @@ public class User {
     
     @Column(name = "password_hash", length = 255) 
     private String passwordHash;
+
+    // Relación uno a muchos con Donation 
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Donation> donaciones;
 
     public User() {
     }
@@ -39,4 +47,7 @@ public class User {
 
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public List<Donation> getDonaciones() { return donaciones; }
+    public void setDonaciones(List<Donation> donaciones) { this.donaciones = donaciones; }
 }

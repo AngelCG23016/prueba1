@@ -8,8 +8,10 @@
 
   <nav class="sidebar-nav">
     <div *ngIf="auth0Service.isAuthenticated() | async; else notAuthenticated">
-      <!-- Dashboard -->
+      
+      <!-- Dashboard-->
       <a class="nav-item" 
+         *ngIf="isAdmin$ | async"
          routerLink="/panel/dashboard" 
          routerLinkActive="active"
          [class.collapsed]="isCollapsed()">

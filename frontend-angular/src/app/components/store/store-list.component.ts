@@ -2,7 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StoreService } from '../../services/store.service';
+import { UserRolesService } from '../../services/user-roles.service';
 import { Product } from '../../models/product.model';
+import { Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-store-list',
@@ -13,8 +15,17 @@ import { Product } from '../../models/product.model';
 })
 export class StoreListComponent implements OnInit {
   private storeService = inject(StoreService);
+  private userRolesService = inject(UserRolesService);
 
   products: Product[] = [];
+
+  // Variables para control de roles
+  canEdit$: Observable<boolean>;
+  canCreate$: Observable<boolean>;
+  canDelete$: Observable<boolean>;
+
+  // Variable para control de carga
+  loading = true;
 
   // estado del formulario
   isEditing = false;
@@ -28,33 +39,58 @@ export class StoreListComponent implements OnInit {
     imagenUrl: ''
   };
 
+  constructor() {
+    // Inicializar los observables de permisos
+    this.canEdit$ = this.userRolesService.canEditProducts();
+    this.canCreate$ = this.userRolesService.canEditProducts();
+    this.canDelete$ = this.userRolesService.canEditProducts();
+  }
+
   ngOnInit(): void {
     this.load();
   }
 
   load() {
+    this.loading = true; 
     this.storeService.getProducts().subscribe({
-      next: (data) => (this.products = data),
-      error: (err) => console.error('Error cargando productos', err)
+      next: (data) => {
+        this.products = data;
+        this.loading = false; 
+      },
+      error: (err) => {
+        console.error('Error cargando productos', err);
+        this.loading = false; 
+      }
     });
   }
 
   startCreate() {
-    this.isEditing = true;
-    this.editingProduct = null;
-    this.form = {
-      nombre: '',
-      precio: 0,
-      descripcion: '',
-      imagenUrl: ''
-    };
+    this.canCreate$.pipe(take(1)).subscribe(canCreate => {
+      if (!canCreate) {
+        alert('No tienes permisos para crear productos');
+        return;
+      }
+      this.isEditing = true;
+      this.editingProduct = null;
+      this.form = {
+        nombre: '',
+        precio: 0,
+        descripcion: '',
+        imagenUrl: ''
+      };
+    });
   }
 
   onEdit(product: Product) {
-    this.isEditing = true;
-    this.editingProduct = product;
-    // clon para no tocar el de la lista hasta guardar
-    this.form = { ...product };
+    this.canEdit$.pipe(take(1)).subscribe(canEdit => {
+      if (!canEdit) {
+        alert('No tienes permisos para editar productos');
+        return;
+      }
+      this.isEditing = true;
+      this.editingProduct = product;
+      this.form = { ...product };
+    });
   }
 
   cancel() {
@@ -62,38 +98,51 @@ export class StoreListComponent implements OnInit {
   }
 
   save() {
-    // asegurar que el precio es número
-    this.form.precio = Number(this.form.precio);
+    const permission$ = this.editingProduct ? this.canEdit$ : this.canCreate$;
+    
+    permission$.pipe(take(1)).subscribe(canProceed => {
+      if (!canProceed) {
+        alert('No tienes permisos para guardar productos.');
+        return;
+      }
 
-    // EDITAR
-    if (this.editingProduct && this.editingProduct.id) {
-      this.storeService.updateProduct(this.editingProduct.id, this.form).subscribe({
+      this.form.precio = Number(this.form.precio);
+
+      if (this.editingProduct && this.editingProduct.id) {
+        this.storeService.updateProduct(this.editingProduct.id, this.form).subscribe({
+          next: () => {
+            this.isEditing = false;
+            this.load();
+          },
+          error: (err) => console.error('Error actualizando producto', err)
+        });
+        return;
+      }
+
+      this.storeService.createProduct(this.form).subscribe({
         next: () => {
           this.isEditing = false;
           this.load();
         },
-        error: (err) => console.error('Error actualizando producto', err)
+        error: (err) => console.error('Error creando producto', err)
       });
-      return;
-    }
-
-    // CREAR
-    this.storeService.createProduct(this.form).subscribe({
-      next: () => {
-        this.isEditing = false;
-        this.load();
-      },
-      error: (err) => console.error('Error creando producto', err)
     });
   }
 
   onDelete(product: Product) {
-    if (!product.id) return;
-    if (!confirm('¿Eliminar este producto?')) return;
+    this.canDelete$.pipe(take(1)).subscribe(canDelete => {
+      if (!canDelete) {
+        alert('No tienes permisos para eliminar productos.');
+        return;
+      }
+      
+      if (!product.id) return;
+      if (!confirm('¿Eliminar este producto?')) return;
 
-    this.storeService.deleteProduct(product.id).subscribe({
-      next: () => this.load(),
-      error: (err) => console.error('Error eliminando producto', err)
+      this.storeService.deleteProduct(product.id).subscribe({
+        next: () => this.load(),
+        error: (err) => console.error('Error eliminando producto', err)
+      });
     });
   }
 }

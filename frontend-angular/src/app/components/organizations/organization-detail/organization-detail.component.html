@@ -43,7 +43,7 @@
             <label>Correo Electrónico:</label>
             <span>{{ organization.correo }}</span>
           </div>
-          <div class="info-item">
+          <div class="info-item" *ngIf="isAdmin$ | async">
             <label>Contraseña:</label>
             <span class="password-field">••••••••</span>
           </div>
@@ -51,7 +51,10 @@
 
         <div class="info-section">
           <h3>Información de Estado</h3>
-          
+          <div class="info-item" *ngIf="isAdmin$ | async">
+            <label>Total Donado:</label>
+            <span class="total-donado">${{ totalDonado | number:'1.2-2' }}</span>
+          </div>
           <div class="info-item">
             <label>Estado:</label>
             <span class="status-active">Activa</span>
@@ -64,6 +67,25 @@
           <span class="material-icons">favorite</span>
           Donar a esta Organización
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Donación -->
+  <div *ngIf="showDonationModal && organization" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Realizar Donación</h2>
+        <button class="close-btn" (click)="closeDonationModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-donation-form 
+          [organization]="organization"
+          (donationSuccess)="onDonationSuccess()"
+          (cancel)="closeDonationModal()">
+        </app-donation-form>
       </div>
     </div>
   </div>

@@ -1,0 +1,179 @@
+<div class="donation-form">
+  <div class="organization-info">
+    <h3>Donando a: {{ organization.nombre }}</h3>
+    <p>Tu contribución ayudará a esta organización a continuar con su labor.</p>
+  </div>
+
+  <form [formGroup]="donationForm" class="amount-section">
+    <h4>Selecciona el monto de donación</h4>
+    <div class="amount-buttons">
+      <button type="button" *ngFor="let amount of [10, 25, 50, 100, 250, 500]" class="amount-btn"
+        [class.active]="donationAmount === amount" (click)="setAmount(amount)">
+        ${{ amount }}
+      </button>
+    </div>
+
+    <div class="custom-amount">
+      <label for="customAmount">O ingresa un monto personalizado:</label>
+      <input type="number" id="customAmount" formControlName="amount" min="1" max="100000"
+        (input)="donationAmount = donationForm.value.amount" class="form-control">
+    </div>
+
+    <div *ngIf="donationForm.get('amount')?.invalid && donationForm.get('amount')?.touched" class="error-message">
+      <span *ngIf="donationForm.get('amount')?.errors?.['required']">El monto es requerido</span>
+      <span *ngIf="donationForm.get('amount')?.errors?.['min']">El monto mínimo es $1</span>
+      <span *ngIf="donationForm.get('amount')?.errors?.['max']">El monto máximo es $100,000</span>
+    </div>
+  </form>
+
+  <div class="payment-methods">
+    <h4>Método de Pago</h4>
+
+    <div class="tabs">
+      <!-- Tarjeta de Crédito -->
+      <button class="tab-btn" [class.active]="activeTab === 'creditCard'" (click)="selectTab('creditCard')">
+        <div class="multi-logos">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" class="payment-logo">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" class="payment-logo">
+        </div>
+      </button>
+
+      <!-- PayPal -->
+      <button class="tab-btn" [class.active]="activeTab === 'paypal'" (click)="selectTab('paypal')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" class="payment-logo">
+      </button>
+    </div>
+
+
+    <!-- Formulario de Tarjeta de Crédito -->
+    <div *ngIf="activeTab === 'creditCard'" class="tab-content">
+      <form [formGroup]="creditCardForm" class="payment-form">
+
+        <div class="fictitious-cards" *ngIf="showFictitiousData">
+          <h5>Tarjeta de Prueba:</h5>
+          <div class="card-buttons">
+            <button type="button" *ngFor="let card of fictitiousCreditCards" class="card-btn"
+              (click)="selectFictitiousCard(card)">
+              {{ card.type }}: ****{{ card.number.slice(-4) }}
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardNumber">Número de Tarjeta</label>
+          <input type="text" id="cardNumber" formControlName="cardNumber" placeholder="0000 0000 0000 0000"
+            class="form-control" maxlength="19" (input)="formatCardNumber($event)"
+            (keypress)="onNumberKeyPress($event)">
+          <div *ngIf="creditCardForm.get('cardNumber')?.invalid && creditCardForm.get('cardNumber')?.touched"
+            class="error-message">
+            <span *ngIf="creditCardForm.get('cardNumber')?.errors?.['required']">El número de tarjeta es
+              requerido</span>
+            <span *ngIf="creditCardForm.get('cardNumber')?.errors?.['pattern']">Formato de tarjeta inválido</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expiryDate">Fecha de Expiración</label>
+            <input type="text" id="expiryDate" formControlName="expiryDate" placeholder="MM/AA" class="form-control"
+              maxlength="5" (input)="formatExpiryDate($event)" (keypress)="onNumberKeyPress($event)">
+            <div *ngIf="creditCardForm.get('expiryDate')?.invalid && creditCardForm.get('expiryDate')?.touched"
+              class="error-message">
+              <span *ngIf="creditCardForm.get('expiryDate')?.errors?.['required']">La fecha de expiración es
+                requerida</span>
+              <span *ngIf="creditCardForm.get('expiryDate')?.errors?.['pattern']">Formato MM/AA requerido</span>
+              <span *ngIf="creditCardForm.get('expiryDate')?.errors?.['expired']">La fecha de expiración debe ser mayor a
+                la fecha actual</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" formControlName="cvv" placeholder="1234" class="form-control" maxlength="4"
+              (input)="validateNumberInput($event)" (keypress)="onNumberKeyPress($event)">
+            <div *ngIf="creditCardForm.get('cvv')?.invalid && creditCardForm.get('cvv')?.touched" class="error-message">
+              <span *ngIf="creditCardForm.get('cvv')?.errors?.['required']">El CVV es requerido</span>
+              <span *ngIf="creditCardForm.get('cvv')?.errors?.['pattern']">CVV debe contener solo números</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardHolder">Nombre del Propietario</label>
+          <input type="text" id="cardHolder" formControlName="cardHolder" placeholder="Nombre del Propietario"
+            class="form-control" maxlength="30" (input)="validateCardHolder($event)" (keypress)="onLetterKeyPress($event)">
+          <div *ngIf="creditCardForm.get('cardHolder')?.invalid && creditCardForm.get('cardHolder')?.touched"
+            class="error-message">
+            <span *ngIf="creditCardForm.get('cardHolder')?.errors?.['required']">El nombre es requerido</span>
+            <span *ngIf="creditCardForm.get('cardHolder')?.errors?.['pattern']">Solo se permiten letras y espacios</span>
+            <span *ngIf="creditCardForm.get('cardHolder')?.errors?.['maxlength']">Máximo 30 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="onCancel()" [disabled]="loading">
+            Cancelar
+          </button>
+          <button type="button" class="btn-primary" (click)="onCreditCardSubmit()"
+            [disabled]="loading || creditCardForm.invalid || donationForm.invalid">
+            <span *ngIf="loading" class="spinner"></span>
+            {{ loading ? 'Procesando...' : 'Donar $' + donationAmount }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Formulario de PayPal -->
+    <div *ngIf="activeTab === 'paypal'" class="tab-content">
+      <form [formGroup]="paypalForm" class="payment-form">
+
+        <div class="fictitious-accounts" *ngIf="showFictitiousData">
+          <h5>Cuenta de Prueba:</h5>
+          <div class="account-buttons">
+            <button type="button" *ngFor="let account of fictitiousPayPalAccounts" class="account-btn"
+              (click)="selectFictitiousPayPal(account)">
+              {{ account.email }}
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="paypalEmail">Email de PayPal</label>
+          <input type="email" id="paypalEmail" formControlName="email" placeholder="ejemplo@gmail.com" class="form-control"
+            maxlength="50">
+          <div *ngIf="paypalForm.get('email')?.invalid && paypalForm.get('email')?.touched" class="error-message">
+            <span *ngIf="paypalForm.get('email')?.errors?.['required']">El email es requerido</span>
+            <span *ngIf="paypalForm.get('email')?.errors?.['email']">Formato de email inválido</span>
+            <span *ngIf="paypalForm.get('email')?.errors?.['maxlength']">Máximo 50 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="paypalPassword">Contraseña</label>
+          <input type="password" id="paypalPassword" formControlName="password" placeholder="••••••••"
+            class="form-control" maxlength="20">
+          <div *ngIf="paypalForm.get('password')?.invalid && paypalForm.get('password')?.touched" class="error-message">
+            <span *ngIf="paypalForm.get('password')?.errors?.['required']">La contraseña es requerida</span>
+            <span *ngIf="paypalForm.get('password')?.errors?.['maxlength']">Máximo 20 caracteres</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="onCancel()" [disabled]="loading">
+            Cancelar
+          </button>
+          <button type="button" class="btn-primary" (click)="onPayPalSubmit()"
+            [disabled]="loading || paypalForm.invalid || donationForm.invalid">
+            <span *ngIf="loading" class="spinner"></span>
+            {{ loading ? 'Procesando...' : 'Donar $' + donationAmount }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="security-notice">
+    <p>🔒 <strong>Ambiente de Prueba:</strong> Todas las transacciones son simuladas.
+      Las Transacciones tienen un limite de $100000</p>
+  </div>
+</div>
